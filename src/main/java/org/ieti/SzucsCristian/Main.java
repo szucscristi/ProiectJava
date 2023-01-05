@@ -1,6 +1,7 @@
 package org.ieti.SzucsCristian;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 
 public class Main
@@ -10,7 +11,8 @@ public class Main
         // FRAME
         JFrame frame=new JFrame("Banca Silver - date clienti");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1980,1080);
+        //frame.setSize(1980,1080);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 
 
@@ -98,7 +100,7 @@ public class Main
         mainPanel.add(text_rata_client);
         mainPanel.add(send);
         mainPanel.add(delete);
-        mainPanel.setBounds(1400,480,500,500);
+        //mainPanel.setBounds(1400,480,500,500);
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setVisible(true);
 
