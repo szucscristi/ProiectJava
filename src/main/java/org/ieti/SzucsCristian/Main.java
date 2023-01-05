@@ -2,27 +2,30 @@ package org.ieti.SzucsCristian;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
+import static java.lang.System.console;
 
 public class Main
 {
+
+    static int selectedRow;
+
     public static void main(String[] args)
     {
         // FRAME
+
         JFrame frame=new JFrame("Banca Silver - date clienti");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //frame.setSize(1980,1080);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-
-
-        // Adaugare elemente in lista
-        DefaultListModel<String> lista=new DefaultListModel<>();
-        lista.addElement("Nume");
-        JList<String> jList_lista=new JList<>(lista);
-        jList_lista.setBounds(7,1,100,100);
-        frame.add(jList_lista);
-
 
         // Butoane bara
         JMenuBar menuBar=new JMenuBar();
@@ -37,7 +40,14 @@ public class Main
         frame.setJMenuBar(menuBar);
 
         // Panel
-        JPanel mainPanel=new JPanel();
+        JPanel mainPanel = new JPanel(new GridBagLayout()) {
+
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(200, 200);
+            }
+
+        };
 
 
         JTextField text_field_nume=new JTextField(15);
@@ -100,21 +110,117 @@ public class Main
         mainPanel.add(text_rata_client);
         mainPanel.add(send);
         mainPanel.add(delete);
-        //mainPanel.setBounds(1400,480,500,500);
+
+        Dimension size = Toolkit. getDefaultToolkit(). getScreenSize();
+        mainPanel.setBounds(size.width-500,size.height/6,size.width/4,size.height/2);
+
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setVisible(true);
 
-        //
-        JTextArea text_area=new JTextArea();
 
-        //Scrollbar
-        JScrollBar scroll=new JScrollBar();
-        scroll.setBounds(1895,1,18,1000);
-        frame.add(scroll);
+        //Table
 
+        JTable table = new JTable();
+        Object[] columns = {"Nume","Prenume","CNP","Serie CI", "Sold curent","Rata lunara"};
+        DefaultTableModel model = new DefaultTableModel();
+        model.setColumnIdentifiers(columns);
+        JScrollPane pane = new JScrollPane(table);
+        pane.setBounds(50, size.height/6, 600, 400);
+        table.setModel(model);
+
+        ArrayList<Person> persons = new ArrayList<>();
+        Object[] row = new Object[6];
+
+
+
+
+        JPanel buttonsPanel = new JPanel();
+        JButton deletePerson = new JButton("Sterge");
+        JButton rataLunaraMaxima = new JButton("Max rata");
+        JButton soldMaxim = new JButton("Max sold");
+
+        buttonsPanel.add(deletePerson);
+        buttonsPanel.add(rataLunaraMaxima);
+        buttonsPanel.add(soldMaxim);
+
+        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
+
+        buttonsPanel.setBounds(700,size.height/6,200,300);
+
+        Border blackline = BorderFactory.createLineBorder(Color.black);
+        mainPanel.setBorder(blackline);
         // placements and visibility
-        frame.getContentPane().add(mainPanel);
-        frame.getContentPane().add(BorderLayout.CENTER,text_area);
+        frame.setLayout(null);
+        frame.add(pane);
+        frame.add(buttonsPanel);
+        frame.add(mainPanel);
         frame.setVisible(true);
+
+
+        table.addMouseListener(new MouseAdapter(){
+
+            @Override
+            public void mouseClicked(MouseEvent e){
+                selectedRow = table.getSelectedRow();
+
+
+            }
+        });
+
+
+        deletePerson.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                persons.remove(selectedRow);
+
+                model.setRowCount(0);
+                for (Person person: persons) {
+                    row[0]=person.getNume();
+                    row[1]=person.getPrenume();
+                    row[2]=person.getCnp();
+                    row[3]=person.getSerieBuletin();
+                    row[4]=person.getSoldCurent();
+                    row[5]=person.getRataLunara();
+
+                    model.addRow(row);
+                }
+
+                text_field_nume.setText("");
+                text_field_prenume.setText("");
+                text_field_cnp.setText("");
+                text_field_serie.setText("");
+                text_field_sold.setText("");
+                text_field_rata.setText("");
+            }
+        });
+
+        send.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                Person p = new Person(text_field_nume.getText(),text_field_prenume.getText(),text_field_cnp.getText(),text_field_serie.getText(),text_field_sold.getText(),text_field_rata.getText());
+                persons.add(p);
+
+                model.setRowCount(0);
+                for (Person person: persons) {
+                    row[0]=person.getNume();
+                    row[1]=person.getPrenume();
+                    row[2]=person.getCnp();
+                    row[3]=person.getSerieBuletin();
+                    row[4]=person.getSoldCurent();
+                    row[5]=person.getRataLunara();
+
+                    model.addRow(row);
+                }
+
+                text_field_nume.setText("");
+                text_field_prenume.setText("");
+                text_field_cnp.setText("");
+                text_field_serie.setText("");
+                text_field_sold.setText("");
+                text_field_rata.setText("");
+
+            }
+        });
     }
 }
