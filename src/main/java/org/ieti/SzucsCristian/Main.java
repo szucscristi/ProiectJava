@@ -26,18 +26,34 @@ public class Main
         JFrame frame=new JFrame("Banca Silver - date clienti");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//        final ImageIcon icon = new ImageIcon("bank.jpg");
+//        JTextArea text = new JTextArea()
+//        {
+//            Image img = icon.getImage();
+//            {setOpaque(false);}
+//            public void paintComponent(Graphics graphics) {
+//                graphics.drawImage(img, 0, 0, this);
+//                super.paintComponent(graphics);
+//            }
+//        };
+//        JScrollPane pane2 = new JScrollPane(text);
+//        Container content = frame.getContentPane();
+//        content.add(pane2, BorderLayout.CENTER);
+//        frame.setDefaultCloseOperation(3);
+//        frame.setSize(400, 300);
+//        frame.setVisible(true);
 
         // Butoane bara
-        JMenuBar menuBar=new JMenuBar();
-        JMenu fileMenu=new JMenu("Fisier");
-        JMenu helpMenu=new JMenu("Ajutor");
-        menuBar.add(fileMenu);
-        menuBar.add(helpMenu);
-        JMenuItem openOption=new JMenuItem("Deschideti");
-        JMenuItem saveOption=new JMenuItem("Salvati ca..");
-        fileMenu.add(openOption);
-        fileMenu.add(saveOption);
-        frame.setJMenuBar(menuBar);
+//        JMenuBar menuBar=new JMenuBar();
+//        JMenu fileMenu=new JMenu("Fisier");
+//        JMenu helpMenu=new JMenu("Ajutor");
+//        menuBar.add(fileMenu);
+//        menuBar.add(helpMenu);
+//        JMenuItem openOption=new JMenuItem("Deschideti");
+//        JMenuItem saveOption=new JMenuItem("Salvati ca..");
+//        fileMenu.add(openOption);
+//        fileMenu.add(saveOption);
+//        frame.setJMenuBar(menuBar);
 
         // Panel
         JPanel mainPanel = new JPanel(new GridBagLayout()) {
@@ -98,8 +114,8 @@ public class Main
         text_rata_client.add(rata_client);
         text_rata_client.add(text_field_rata);
 
-        JButton send=new JButton("Introducere date");
-        JButton delete=new JButton("Stergere date");
+        JButton send=new JButton("Introduceti datele");
+        JButton delete=new JButton("Stergeti datele din panou");
 
         mainPanel.add(text_informativ);
         mainPanel.add(text_nume_client);
@@ -135,9 +151,9 @@ public class Main
 
 
         JPanel buttonsPanel = new JPanel();
-        JButton deletePerson = new JButton("Sterge");
-        JButton rataLunaraMaxima = new JButton("Max rata");
-        JButton soldMaxim = new JButton("Max sold");
+        JButton deletePerson = new JButton("Stergeti datele persoanei");
+        JButton rataLunaraMaxima = new JButton("Rata maxima");
+        JButton soldMaxim = new JButton("Sold maxim");
 
         buttonsPanel.add(deletePerson);
         buttonsPanel.add(rataLunaraMaxima);
@@ -184,13 +200,82 @@ public class Main
 
                     model.addRow(row);
                 }
+            }
+        });
+        soldMaxim.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int x=0;
+                String max="0",persoanaNume="",persoanaPrenume="";
+                model.setRowCount(0);
+                for (Person person: persons) {
+                    if(Integer.parseInt(person.getSoldCurent()) > Integer.parseInt(max)) {
+                        max = person.getSoldCurent();
+                        persoanaNume=person.getNume();
+                        persoanaPrenume=person.getPrenume();
+                    }
+                }
+                model.setRowCount(0);
+                for (Person person: persons) {
+                    row[0]=person.getNume();
+                    row[1]=person.getPrenume();
+                    row[2]=person.getCnp();
+                    row[3]=person.getSerieBuletin();
+                    row[4]=person.getSoldCurent();
+                    row[5]=person.getRataLunara();
 
+                    model.addRow(row);
+                }
+                JOptionPane.showMessageDialog(null,
+                        "Soldul curent cel mai mare il detine "+persoanaNume+" "+persoanaPrenume+" :"+max+" de lei!",
+                        "Soldul curent maxim",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+
+
+        rataLunaraMaxima.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int x=0;
+                String max="0",persoanaNume="",persoanaPrenume="";
+                model.setRowCount(0);
+                for (Person person: persons) {
+                    if(Integer.parseInt(person.getRataLunara()) > Integer.parseInt(max)) {
+                        max = person.getRataLunara();
+                        persoanaNume=person.getNume();
+                        persoanaPrenume=person.getPrenume();
+                    }
+                }
+                model.setRowCount(0);
+                for (Person person: persons) {
+                    row[0]=person.getNume();
+                    row[1]=person.getPrenume();
+                    row[2]=person.getCnp();
+                    row[3]=person.getSerieBuletin();
+                    row[4]=person.getSoldCurent();
+                    row[5]=person.getRataLunara();
+
+                    model.addRow(row);
+                }
+                JOptionPane.showMessageDialog(null,
+                        "Rata lunara cea mai mare o are "+persoanaNume+" "+persoanaPrenume+" :"+max+" de lei!",
+                        "Rata lunara maxima",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+        delete.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 text_field_nume.setText("");
                 text_field_prenume.setText("");
                 text_field_cnp.setText("");
                 text_field_serie.setText("");
                 text_field_sold.setText("");
                 text_field_rata.setText("");
+
             }
         });
 
@@ -222,5 +307,8 @@ public class Main
 
             }
         });
+
+
+
     }
 }
