@@ -1,5 +1,6 @@
 package org.ieti.SzucsCristian;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
@@ -8,6 +9,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import javax.swing.JScrollPane;
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,29 +24,13 @@ public class Main
 
     static int selectedRow;
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) throws IOException {
         // FRAME
 
         JFrame frame=new JFrame("Banca Silver - date clienti");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-//        final ImageIcon icon = new ImageIcon("bank.jpg");
-//        JTextArea text = new JTextArea()
-//        {
-//            Image img = icon.getImage();
-//            {setOpaque(false);}
-//            public void paintComponent(Graphics graphics) {
-//                graphics.drawImage(img, 0, 0, this);
-//                super.paintComponent(graphics);
-//            }
-//        };
-//        JScrollPane pane2 = new JScrollPane(text);
-//        Container content = frame.getContentPane();
-//        content.add(pane2, BorderLayout.CENTER);
-//        frame.setDefaultCloseOperation(3);
-//        frame.setSize(400, 300);
-//        frame.setVisible(true);
+
 
         // Butoane bara
 //        JMenuBar menuBar=new JMenuBar();
@@ -142,7 +131,11 @@ public class Main
         model.setColumnIdentifiers(columns);
         JScrollPane pane = new JScrollPane(table);
         pane.setBounds(50, size.height/6, 600, 400);
+        table.getTableHeader().setReorderingAllowed(false);
         table.setModel(model);
+
+
+
 
         ArrayList<Person> persons = new ArrayList<>();
         Object[] row = new Object[6];
@@ -165,10 +158,32 @@ public class Main
 
         Border blackline = BorderFactory.createLineBorder(Color.black);
         mainPanel.setBorder(blackline);
+
+
+        //Add image
+
+        BufferedImage myPicture = ImageIO.read(new File("bank.png"));
+        JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+
+        JPanel imagePanel = new JPanel();
+//        imagePanel.setSize(new Dimension( 400, 200 ));
+        imagePanel.setBounds(size.width/2-298,size.height/2-207,596,415);
+        imagePanel.add(picLabel);
+
+
+
+
+
+
+
+
         // placements and visibility
         frame.setLayout(null);
+        frame.add(imagePanel);
         frame.add(pane);
         frame.add(buttonsPanel);
+        //frame.add(pane2);
+
         frame.add(mainPanel);
         frame.setVisible(true);
 
@@ -307,6 +322,8 @@ public class Main
 
             }
         });
+
+
 
 
 
