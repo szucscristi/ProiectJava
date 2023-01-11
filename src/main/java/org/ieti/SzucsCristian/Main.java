@@ -162,7 +162,7 @@ public class Main
 
         //Add image
 
-        BufferedImage myPicture = ImageIO.read(new File("bank.png"));
+        BufferedImage myPicture = ImageIO.read(new File("resources/bank.png"));
         JLabel picLabel = new JLabel(new ImageIcon(myPicture));
 
         JPanel imagePanel = new JPanel();
